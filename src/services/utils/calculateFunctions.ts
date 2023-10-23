@@ -63,3 +63,45 @@ export function calculateSquaredDifferences (x: Array<number | null>, y: Array<n
   }
   return squaredDifferences
 }
+
+
+/* Function needed for meanDifferencePrediction */
+export function calculateMeans(data: Array<Array<number | null>> | Array<number | null>): number[] {
+  const means: number[] = [];
+
+  // Verificar si se proporciona una matriz o un vector
+  const isMatrix = Array.isArray(data[0]);
+
+  if (isMatrix) {
+    // Calcular medias para cada fila de la matriz
+    for (let row of data as Array<Array<number | null>>) {
+      let sum = 0;
+      let counter = 0;
+
+      for (let value of row) {
+        if (value !== null) {
+          sum += value;
+          counter++;
+        }
+      }
+
+      const mean = counter > 0 ? sum / counter : 0;
+      means.push(mean);
+    }
+  } else {
+    // Calcular la media para el vector
+    let sum = 0;
+    let counter = 0;
+
+    for (let value of data as (number | null)[]) {
+      if (value !== null) {
+        sum += value;
+        counter++;
+      }
+    }
+
+    const mean = counter > 0 ? sum / counter : 0;
+    means.push(mean);
+  }
+  return means
+}

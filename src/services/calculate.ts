@@ -1,6 +1,6 @@
-import { type Metric, type Prediction } from '../types'
+import { type Metric, type Prediction, type Incognita } from '../types'
 import { readMatrix } from './utils/readMatrix'
-import { calculateCosineDistance, calculateEuclideanDistance, calculatePearsonCorrelation } from './utils/similarityFunctions'
+import { SUPPORTED_METRICS_FUNCTIONS } from '../constants'
 
 export async function calculate ({
   chosenMetric,
@@ -14,32 +14,30 @@ export async function calculate ({
   text: string
 }) {
   const stringArray: string[] = text.split('\n')
-  // const read = readMatrix(stringArray)
-  // console.log(read.value.toString())
-  // onsole.log(read)
-
-  /* const datos: string[] = [
-    "0.000",
-    "5.000",
-    "3.142 2.648 1.649 - 1.116 0.883 0.423 3.976 - 3.143",
-    "3.412 0.314 3.796 4.233 2.159 4.513 2.392 0.868 2.473 -",
-    "4.408 4.495 2.052 - 0.051 - 3.355 3.739 4.085 -",
-    "1.731 - - 1.511 4.866 2.217 3.003 2.901 2.113 -",
-    "0.555 4.887 1.217 0.803 3.799 4.877 2.831 0.991 4.493 0.437"
-  ] */
   const matrix = readMatrix(stringArray)
 
-  const r = calculateCosineDistance(matrix.value[0] ?? [], matrix.value[1] ?? [])
-  const r2 = calculateEuclideanDistance(matrix.value[0] ?? [], matrix.value[1] ?? [])
-  const r3 = calculatePearsonCorrelation(matrix.value[0] ?? [], matrix.value[1] ?? [])
-  switch (chosenMetric) {
-    case 'cp':
-      return r
+  const queue: Incognita[] = matrix.queue
+  let metricMatrix
+  if (matrix != null) {
+    console.log('msize', matrix.value[0].length)
+    metricMatrix = new Array<number>()
+  } else { throw new Error('Matrix is null') }
 
-    case 'de':
-      return r2
-
-    case 'dc':
-      return r3
+  // const sz = queue.length
+  for (let i = 0; i < 1; i++) {
+    const current = queue[i]
+    if (current?.pos != null) {
+      for (let j = 0; j < 1; j++) {
+        for (let k = 0; k < matrix.value.length; k++) {
+          if (k === current.index) { continue }
+          const metricFunction = SUPPORTED_METRICS_FUNCTIONS[chosenMetric]
+          const result = metricFunction(matrix.value[current.index], matrix.value[k])
+          console.log(result)
+          metricMatrix.push(result)
+        }
+      }
+      console.log(metricMatrix)
+      return metricMatrix
+    }
   }
 }

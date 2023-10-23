@@ -1,14 +1,4 @@
-export interface Matrix {
-  value: Array<Array<number | null>>
-  min: number
-  max: number
-  queue: Incognita[]
-}
-
-export interface Incognita {
-  index: number
-  pos: number[]
-}
+import { type Matrix, type Incognita } from '../../types'
 
 export function readMatrix (data: string[]): Matrix {
   if (data.length < 3) { throw new Error('La matriz debe contener al menos tres líneas de datos.') } // TODO comprobar validez matriz
@@ -53,3 +43,5 @@ export function readMatrix (data: string[]): Matrix {
 
   return { min: minValue, max: maxValue, value: matrix, queue }
 }
+
+// TODO Validate

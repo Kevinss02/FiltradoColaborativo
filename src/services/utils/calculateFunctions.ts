@@ -56,7 +56,7 @@ export function calculateSquaredDifferences (x: Array<number | null>, y: Array<n
   const squaredDifferences = []
   for (let i = 0; i < x.length; i++) {
     if (x[i] !== null && y[i] !== null) {
-      squaredDifferences.push(((x[i] ?? 0) - (y[i] ?? 0)) ** 2)
+      squaredDifferences.push(((x[i]) ?? 0 - (y[i] ?? 0)) ** 2)
     } else {
       squaredDifferences.push(0)
     }

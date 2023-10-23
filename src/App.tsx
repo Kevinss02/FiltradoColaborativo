@@ -48,7 +48,7 @@ function App () {
 
   return (
     <Container fluid>
-      <h2 className='mb-5' style={{padding: '50px'}}>Método de filtrado colaborativo</h2>
+      <h2 className='mb-5' style={{ padding: '50px' }}>Método de filtrado colaborativo</h2>
 
       <Row>
         <Col style={{ width: '400px' }}>
@@ -67,7 +67,7 @@ function App () {
 
         </Col>
 
-        <Col style={{width: '200px', display: 'flex', justifyContent: 'center'}}>
+        <Col style={{ width: '200px', display: 'flex', justifyContent: 'center' }}>
           <FloatingInput
             value={neighborsNumber}
             onChange={setNeighborsNumber}

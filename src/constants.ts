@@ -1,7 +1,14 @@
+import { calculateCosineDistance, calculateEuclideanDistance, calculatePearsonCorrelation } from './services/utils/similarityFunctions'
 export const SUPPORTED_METRICS = {
   cp: 'Correlación de Pearson',
   dc: 'Distancia Coseno',
   de: 'Distancia Euclídea'
+}
+
+export const SUPPORTED_METRICS_FUNCTIONS = {
+  cp: calculateCosineDistance,
+  dc: calculateEuclideanDistance,
+  de: calculatePearsonCorrelation
 }
 
 export const SUPPORTED_PREDICTIONS = {

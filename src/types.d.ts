@@ -24,3 +24,15 @@ export enum SectionType {
   Output = 'output',
   Neighbor = 'neighbor'
 }
+
+export interface Matrix {
+  value: Array<Array<number | null>>
+  min: number
+  max: number
+  queue: Incognita[]
+}
+
+export interface Incognita {
+  index: number
+  pos: number[]
+}

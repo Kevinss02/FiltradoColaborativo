@@ -11,10 +11,9 @@
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
     "moduleResolution": "Node",
-    "noUncheckedIndexedAccess": true,
+    
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noUncheckedIndexedAccess": true,
     "noEmit": true,
     "jsx": "react-jsx"
   },

@@ -10,7 +10,7 @@ interface Props {
   className?: string
 }
 
-const commonStyles = { border: 0, height: '200px' }
+const commonStyles = { height: '200px' }
 
 const getPlaceholder = ({ type, loading }: { type: SectionType, loading?: boolean }) => {
   if (type === SectionType.Input) return 'Introducir matriz'

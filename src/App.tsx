@@ -8,6 +8,7 @@ import { ClipboardIcon } from './components/Icons'
 import { MetricSelector } from './components/MetricSelector'
 import { PredictionSelector } from './components/PredictionSelector'
 import { TextArea } from './components/TextArea'
+import { FloatingInput } from './components/FloatingInput'
 import { useStore } from './hooks/useStore'
 import { calculate } from './services/calculate'
 
@@ -36,7 +37,7 @@ function App () {
     calculate({ chosenMetric, predictionType, neighborsNumber, text: debouncedFromText })
       .then(result => {
         if (result == null) return
-        setResultMatrix(result)
+        setResultMatrix(result.toString())
       })
       .catch((error) => { setResultMatrix(error) })
   }, [debouncedFromText, chosenMetric, predictionType, neighborsNumber])
@@ -47,10 +48,10 @@ function App () {
 
   return (
     <Container fluid>
-      <h2 className='mb-5'>Método de filtrado colaborativo</h2>
+      <h2 className='mb-5' style={{padding: '50px'}}>Método de filtrado colaborativo</h2>
 
       <Row>
-        <Col>
+        <Col style={{ width: '400px' }}>
           <Stack gap={2}>
             <MetricSelector
               value={chosenMetric}
@@ -66,17 +67,15 @@ function App () {
 
         </Col>
 
-        <Col>
-            <TextArea
-                loading={loading}
-                type={SectionType.Neighbor}
-                value={neighborsNumber}
-                onChange={setNeighborsNumber}
-                style={{ height: '40px', width: '40px' }}
-              />
+        <Col style={{width: '200px', display: 'flex', justifyContent: 'center'}}>
+          <FloatingInput
+            value={neighborsNumber}
+            onChange={setNeighborsNumber}
+            style={{ height: '38px', width: '170px' }}
+          />
         </Col>
 
-        <Col>
+        <Col style={{ width: '400px' }}>
           <Stack gap={2}>
             <PredictionSelector
               value={predictionType}

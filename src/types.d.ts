@@ -23,6 +23,7 @@ export type Action =
   | { type: 'SET_RESULT_MATRIX', payload: string }
   | { type: 'SET_OUTPUT', payload: string }
   | { type: 'SET_OUTPUT_INDEX', payload: string }
+  | { type: 'SET_INCOGNITA_NUMBER', payload: string}
 
 export enum SectionType {
   Input = 'input',

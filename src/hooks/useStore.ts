@@ -91,6 +91,14 @@ function reducer (state: State, action: Action) {
     }
   }
 
+  if (type === 'SET_INCOGNITA_NUMBER') {
+    return {
+      ...state,
+      loading: false,
+      incognitaNumber: action.payload
+    }
+  }
+
   return state
 }
 
@@ -136,6 +144,10 @@ export function useStore () {
     dispatch({ type: 'SET_OUTPUT_INDEX', payload })
   }
 
+  const setIncognitaNumber = (payload: string) => {
+    dispatch({ type: 'SET_INCOGNITA_NUMBER', payload })
+  }
+
   return {
     chosenMetric,
     predictionType,
@@ -152,6 +164,7 @@ export function useStore () {
     setInputMatrix,
     setResultMatrix,
     setOutput,
-    setOutputIndex
+    setOutputIndex,
+    setIncognitaNumber,
   }
 }

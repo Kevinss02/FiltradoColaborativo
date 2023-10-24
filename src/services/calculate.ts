@@ -8,22 +8,26 @@ export async function calculate ({
   chosenMetric,
   predictionType,
   neighborsNumber,
+  setIncognitaNumber,
   text
 }: {
   chosenMetric: Metric
   predictionType: Prediction
   neighborsNumber: string
+  setIncognitaNumber: (payload: string) => void
   text: string
 }) {
-  const textArray: string[] = text.split('\n')
-  const matrix = readMatrix(textArray)
+  const textArray: string[] = text.split('\n').map(line => line.trimEnd());
+  let matrix = readMatrix(textArray)
 
   const queue: Incognita[] = matrix.queue
-  console.log('QUEUE: ', queue)
-  // const INCOGNITA_ROW_NUMBER = queue.length
-  /* const INCOGNITA_NUMBER = queue.reduce((sum, element) => {
+
+  const INCOGNITA_NUMBER = queue.reduce((sum, element) => {
     return sum + element.pos.length
-  }, 0) */
+  }, 0)
+
+  setIncognitaNumber(INCOGNITA_NUMBER.toString())
+
 
   const MAX_NEIGHBORS_NUMBER = matrix.value.length - 1
   const NEIGHBORS_NUMBER = parseInt(neighborsNumber)
@@ -38,10 +42,9 @@ export async function calculate ({
   let output = new Array<string>()
   const outputWithSeparateLines = new Array<string>()
 
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < queue.length; i++) {
     // Saca la primera fila con incógnitas de la cola
     const current = queue[i]
-    console.log('CURRENT', current)
 
     if (current?.pos != null) {
       // Itera por cada una de las incógnitas de la fila elegida
@@ -84,16 +87,11 @@ export async function calculate ({
           if (metricVectorNeighbors.length === NEIGHBORS_NUMBER) { break }
         }
 
-        console.log('CALCULOS', metricVector)
-        console.log('SOLOVECINOS', metricVectorNeighbors)
-        console.log('VECINOSRATINGS', neighborsRatings)
-
         // Se calcula la media de las filas de la matriz
         const means = calculateMeans(matrix.value)
 
         // Se calcula la media de la fila de la incógnita
         const userMean = calculateMeans(matrix.value[queue[i].index])[0]
-        console.log(userMean)
 
         // Vector con solo los valores del vector metricVectorNeighbors, sin índices
         const metricVectorNeighborsValues = metricVectorNeighbors.map(element => element.value)
@@ -106,23 +104,27 @@ export async function calculate ({
           resultPrediction = meanDifferencePrediction(userMean, metricVectorNeighborsValues, neighborsRatings, means)
         }
 
-        console.log('RESULT', resultPrediction)
+        resultPrediction = resultPrediction >= matrix.max? matrix.max : resultPrediction
+        resultPrediction = resultPrediction <= matrix.min? matrix.min : resultPrediction
+
+        resultPrediction = parseFloat(resultPrediction.toFixed(3))
+
+        /// Resolver matriz
+        matrix.value[queue[i].index][queue[i].pos[j]] = resultPrediction
 
         // Se prepara el output respecto a los datos calculados
         outputIncognita = `Incógnita: (${current.index}, ${current.pos[j]})`
-        outputMetricResults = 'Vecinos: '
+        outputMetricResults = 'Vecinos seleccionados: '
         output.push(outputIncognita)
         output.push(outputMetricResults)
         for (let i = 0; i < metricVectorNeighbors.length; i++) {
           outputMetricResults = `  => (${metricVectorNeighbors[i].index}, ${metricVectorNeighbors[i].value})`
           output.push(outputMetricResults)
         }
-        outputPredictionResult = `\nPred: ${resultPrediction}`
+        outputPredictionResult = `\nPredicción: ${resultPrediction}`
         output.push(outputPredictionResult)
 
-        console.log(output)
         const textWithSeparateLines: string = output.join('\n')
-        console.log(textWithSeparateLines)
         outputWithSeparateLines.push(textWithSeparateLines)
 
         // Limpieza de variables
@@ -134,7 +136,19 @@ export async function calculate ({
       }
     } else { throw new Error(`${current.index} pos is null`) }
   }
-  return outputWithSeparateLines
+
+  const resultMatrix: string[] = []
+  for (let i = 0; i < matrix.value.length; i++) {
+    let matrixRow: string[] = []
+    for (let j = 0; j < matrix.value[i].length; j++) {
+      const matrixValue = matrix.value[i][j]?.toString() || ''
+
+      matrixRow.push(matrixValue === "5" ? "5.000" : matrixValue === "0" ? "0.000" : matrixValue)
+    }
+    resultMatrix.push(matrixRow.join(', '))
+  }
+  const resultMatrixStr: string = resultMatrix.join('\n')
+  return { output: outputWithSeparateLines, resultMatrix: resultMatrixStr }
 }
 
 export function printOutput (output: string[], outputIndex: number) {

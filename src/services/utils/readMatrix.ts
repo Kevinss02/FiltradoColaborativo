@@ -1,10 +1,9 @@
 import { type Matrix, type Incognita } from '../../types'
 
 export function readMatrix (data: string[]): Matrix {
-  if (data.length < 3) { throw new Error('La matriz debe contener al menos tres líneas de datos.') } // TODO comprobar validez matriz
-  //  Comprobar fila 1 y 2 sean un solo valor
-  if (!(data[0] != null && data[1] != null)) { throw new Error('Hay un error en las líneas 1 y 2') }
-  const minValue = parseFloat(data[0])
+  if (data.length < 3) { throw new Error('La matriz debe contener al menos tres líneas de datos.') } 
+  if (!(data[0] != null && data[1] != null)) { throw new Error('Hay un error en las líneas 1 y 2') } 
+  const minValue = parseFloat(parseFloat(data[0]).toFixed(3))
   const maxValue = parseFloat(data[1])
   const matrix: Array<Array<number | null>> = []
   const queue: Incognita[] = []
@@ -40,8 +39,6 @@ export function readMatrix (data: string[]): Matrix {
       return a.index - b.index
     }
   })
-
   return { min: minValue, max: maxValue, value: matrix, queue }
 }
 
-// TODO Validate

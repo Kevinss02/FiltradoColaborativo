@@ -2,9 +2,9 @@ export function simplePrediction (similarities: number[], values: number[]): num
   if (similarities.length !== values.length) {
     throw new Error('Las longitudes de los vectores de similitudes y valores deben ser iguales')
   }
-
-  const numerator = similarities.reduce((acc, value, index) => acc + value * (values[index] ?? 0), 0)
-  const denominator = similarities.reduce((acc, value) => acc + value, 0)
+  
+  const numerator = similarities.reduce((acc, value, index) => acc + value * (values[index]), 0)
+  const denominator = Math.abs(similarities.reduce((acc, value) => acc + value, 0))
 
   if (denominator === 0) {
     throw new Error('El denominador no puede ser cero')

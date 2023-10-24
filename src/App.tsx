@@ -4,13 +4,14 @@ import { useDebounce } from './hooks/useDebounce'
 import { Container, Row, Col, Button, Stack } from 'react-bootstrap'
 
 import './App.css'
-import { ArrowsIcon, ClipboardIcon } from './components/Icons'
+import { ClipboardIcon } from './components/Icons'
 import { MetricSelector } from './components/MetricSelector'
 import { PredictionSelector } from './components/PredictionSelector'
 import { TextArea } from './components/TextArea'
 import { FloatingInput } from './components/FloatingInput'
 import { useStore } from './hooks/useStore'
 import { calculate, printOutput } from './services/calculate'
+import { PaginationIncognita } from './components/PaginationIncognita'
 
 import { SectionType } from './types.d'
 
@@ -23,6 +24,7 @@ function App () {
     resultMatrix,
     output,
     outputIndex,
+    incognitaNumber,
     loading,
     setMetric,
     setPrediction,
@@ -30,7 +32,8 @@ function App () {
     setInputMatrix,
     setResultMatrix,
     setOutput,
-    setOutputIndex
+    setOutputIndex,
+    setIncognitaNumber
   } = useStore()
 
   const debouncedFromText = useDebounce(inputMatrix, 300)
@@ -38,29 +41,18 @@ function App () {
   useEffect(() => {
     if (debouncedFromText === '') return
 
-    calculate({ chosenMetric, predictionType, neighborsNumber, text: debouncedFromText })
+    calculate({ chosenMetric, predictionType, neighborsNumber, setIncognitaNumber, text: debouncedFromText })
       .then(result => {
         if (result == null) return
-        setResultMatrix(printOutput(result, parseInt(outputIndex)))
-        console.log('OU1', outputIndex)
-        setOutput(printOutput(result, parseInt(outputIndex)))
+  
+        setResultMatrix(result.resultMatrix)
+        setOutput(printOutput(result.output, parseInt(outputIndex)))
       })
       .catch((error) => { setResultMatrix(error) })
   }, [debouncedFromText, chosenMetric, predictionType, neighborsNumber, outputIndex])
 
   const handleClipboard = () => {
     navigator.clipboard.writeText(resultMatrix).catch(() => {})
-  }
-
-  const handleArrow = () => {
-    const {
-      incognitaNumber
-    } = useStore()
-    const currentIndex = parseInt(outputIndex)
-    let nextIndex = currentIndex + 1
-    if (nextIndex >= parseInt(incognitaNumber)) { nextIndex = 0 }
-    setOutputIndex(nextIndex.toString())
-    console.log('OU2', outputIndex)
   }
 
   return (
@@ -102,22 +94,22 @@ function App () {
               <TextArea
                 loading={loading}
                 type={SectionType.Matrix}
-                value={inputMatrix}
+                value={resultMatrix}
                 onChange={setResultMatrix}
               />
-              <div style={{ position: 'absolute', left: 0, bottom: 0, display: 'flex' }}>
-                <Button
-                  variant='link'
-                  onClick={handleClipboard}>
-                  <ClipboardIcon />
-                </Button>
-              </div>
+            </div>
+            <div style={{ marginLeft: '220px' }}>
+              <Button
+                variant='link'
+                onClick={handleClipboard}>
+                <ClipboardIcon />
+              </Button>
             </div>
           </Stack>
         </Col>
       </Row>
 
-      <Row gap={2} className='mt-5 p-2'>
+      <Row gap={2} className='mt-2 mb-3'>
         <div style={{ position: 'relative' }}>
           <TextArea
             loading={loading}
@@ -125,16 +117,9 @@ function App () {
             value={output}
             onChange={setOutput}
           />
-
-          <div style={{ position: 'absolute', left: 0, bottom: 0, display: 'flex' }}>
-            <Button
-              variant='link'
-              onClick={handleArrow}>
-              <ArrowsIcon />
-            </Button>
-          </div>
         </div>
       </Row>
+      <PaginationIncognita incognitaNumber={incognitaNumber} setOutputIndex={setOutputIndex}/>
     </Container>
   )
 }

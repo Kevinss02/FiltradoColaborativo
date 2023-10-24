@@ -21,7 +21,7 @@ const getPlaceholder = ({ type, loading }: { type: SectionType, loading?: boolea
 
 export const TextArea = ({ type, loading, value, style, className, onChange }: Props) => {
   const styles: React.CSSProperties = (type === SectionType.Input)
-    ? { ...commonStyles, ...style, whiteSpace: 'nowrap', overflowX: 'auto', overflowY: 'hidden' }
+    ? { ...commonStyles, ...style, whiteSpace: 'nowrap', overflowX: 'auto', overflowY: 'auto' }
     : (type === SectionType.Matrix) ? { ...commonStyles, ...style, whiteSpace: 'pre', overflowX: 'auto', overflowY: 'auto' }
     : { ...commonStyles, ...style, backgroundColor: '#f5f5f5' }
 

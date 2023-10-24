@@ -55,4 +55,4 @@ Para el desarrollo de este código cabe a destacar una serie de pasos que hemos 
 ## Ejemplo de uso
 
   En el caso mostrado dentro de la web, se ha utilizado la matriz de datos `utility-matrix-10-25-1.txt` del [repositorio](https://github.com/ull-cs/gestion-conocimiento/blob/main/recommeder-systems/examples-utility-matrices/):
-  ![Captura de la interfaz web]()
+  ![Captura de la interfaz web](CapturaEjemploUso.PNG)

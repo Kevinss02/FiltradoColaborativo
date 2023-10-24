@@ -1,5 +1,4 @@
 import { calculateCosineDistance, calculateEuclideanDistance, calculatePearsonCorrelation } from './services/utils/similarityFunctions'
-import { simplePrediction, meanDifferencePrediction } from './services/utils/predictionFunctions'
 
 export const SUPPORTED_METRICS = {
   cp: 'Correlación de Pearson',
@@ -10,14 +9,14 @@ export const SUPPORTED_METRICS = {
 export const SUPPORTED_METRICS_FUNCTIONS = {
   cp: { metric: calculatePearsonCorrelation, sort: sortByGreater },
   dc: { metric: calculateCosineDistance, sort: sortByLower },
-  de: { metric: calculateEuclideanDistance, sort: sortByLower}
+  de: { metric: calculateEuclideanDistance, sort: sortByLower }
 }
 
-function sortByGreater (arr: {value: number, index: number}[]): {value: number, index: number}[] {
+function sortByGreater (arr: Array<{ value: number, index: number }>): Array<{ value: number, index: number }> {
   return arr.sort((a, b) => b.value - a.value)
 }
 
-function sortByLower (arr: {value: number, index: number}[]):{value: number, index: number}[] {
+function sortByLower (arr: Array<{ value: number, index: number }>): Array<{ value: number, index: number }> {
   return arr.sort((a, b) => a.value - b.value)
 }
 

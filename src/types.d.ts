@@ -9,6 +9,9 @@ export interface State {
   neighborsNumber: string
   inputMatrix: string
   resultMatrix: string
+  output: string
+  outputIndex: string
+  incognitaNumber: string
   loading: boolean
 }
 
@@ -18,11 +21,13 @@ export type Action =
   | { type: 'SET_NEIGHBORS_NUMBER', payload: string }
   | { type: 'SET_INPUT_MATRIX', payload: string }
   | { type: 'SET_RESULT_MATRIX', payload: string }
+  | { type: 'SET_OUTPUT', payload: string }
+  | { type: 'SET_OUTPUT_INDEX', payload: string }
 
 export enum SectionType {
   Input = 'input',
-  Output = 'output',
-  Neighbor = 'neighbor'
+  Matrix = 'matrix',
+  Output = 'output'
 }
 
 export interface Matrix {

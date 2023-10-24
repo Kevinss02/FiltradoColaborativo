@@ -14,14 +14,14 @@ const commonStyles = { height: '200px' }
 
 const getPlaceholder = ({ type, loading }: { type: SectionType, loading?: boolean }) => {
   if (type === SectionType.Input) return 'Introducir matriz'
-  if (type === SectionType.Neighbor) return ''
+  if (type === SectionType.Output) return 'Salida'
   if (loading === true) return 'Cargando...'
-  return 'Salida'
+  return 'Matriz resultado'
 }
 
 export const TextArea = ({ type, loading, value, style, className, onChange }: Props) => {
-  const styles = type === SectionType.Input || type === SectionType.Neighbor
-    ? { ...commonStyles, ...style }
+  const styles: React.CSSProperties = (type === SectionType.Input || type === SectionType.Matrix)
+    ? { ...commonStyles, ...style, whiteSpace: 'nowrap', overflowX: 'auto', overflowY: 'hidden' }
     : { ...commonStyles, ...style, backgroundColor: '#f5f5f5' }
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -30,11 +30,11 @@ export const TextArea = ({ type, loading, value, style, className, onChange }: P
 
   return (
     <Form.Control
-      autoFocus={type === SectionType.Input || type === SectionType.Neighbor}
-      as={type === SectionType.Neighbor ? 'input' : 'textarea' }
-      disabled={type === SectionType.Output}
+      autoFocus={type === SectionType.Input}
+      as='textarea'
+      disabled={type === SectionType.Output || type === SectionType.Matrix}
       placeholder={getPlaceholder({ type, loading })}
-      style={{ ...styles, whiteSpace: 'nowrap', overflowX: 'auto', overflowY: 'hidden' }}
+      style={styles}
       value={value}
       onChange={handleChange}
       className={`${className ?? ''}`}

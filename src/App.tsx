@@ -4,13 +4,13 @@ import { useDebounce } from './hooks/useDebounce'
 import { Container, Row, Col, Button, Stack } from 'react-bootstrap'
 
 import './App.css'
-import { ClipboardIcon } from './components/Icons'
+import { ArrowsIcon, ClipboardIcon } from './components/Icons'
 import { MetricSelector } from './components/MetricSelector'
 import { PredictionSelector } from './components/PredictionSelector'
 import { TextArea } from './components/TextArea'
 import { FloatingInput } from './components/FloatingInput'
 import { useStore } from './hooks/useStore'
-import { calculate } from './services/calculate'
+import { calculate, printOutput } from './services/calculate'
 
 import { SectionType } from './types.d'
 
@@ -21,12 +21,16 @@ function App () {
     neighborsNumber,
     inputMatrix,
     resultMatrix,
+    output,
+    outputIndex,
     loading,
     setMetric,
     setPrediction,
     setNeighborsNumber,
     setInputMatrix,
-    setResultMatrix
+    setResultMatrix,
+    setOutput,
+    setOutputIndex
   } = useStore()
 
   const debouncedFromText = useDebounce(inputMatrix, 300)
@@ -37,13 +41,26 @@ function App () {
     calculate({ chosenMetric, predictionType, neighborsNumber, text: debouncedFromText })
       .then(result => {
         if (result == null) return
-        setResultMatrix(result.toString())
+        setResultMatrix(printOutput(result, parseInt(outputIndex)))
+        console.log('OU1', outputIndex)
+        setOutput(printOutput(result, parseInt(outputIndex)))
       })
       .catch((error) => { setResultMatrix(error) })
-  }, [debouncedFromText, chosenMetric, predictionType, neighborsNumber])
+  }, [debouncedFromText, chosenMetric, predictionType, neighborsNumber, outputIndex])
 
   const handleClipboard = () => {
     navigator.clipboard.writeText(resultMatrix).catch(() => {})
+  }
+
+  const handleArrow = () => {
+    const {
+      incognitaNumber
+    } = useStore()
+    const currentIndex = parseInt(outputIndex)
+    let nextIndex = currentIndex + 1
+    if (nextIndex >= parseInt(incognitaNumber)) { nextIndex = 0 }
+    setOutputIndex(nextIndex.toString())
+    console.log('OU2', outputIndex)
   }
 
   return (
@@ -84,8 +101,8 @@ function App () {
             <div style={{ position: 'relative' }}>
               <TextArea
                 loading={loading}
-                type={SectionType.Output}
-                value={resultMatrix}
+                type={SectionType.Matrix}
+                value={inputMatrix}
                 onChange={setResultMatrix}
               />
               <div style={{ position: 'absolute', left: 0, bottom: 0, display: 'flex' }}>
@@ -98,6 +115,25 @@ function App () {
             </div>
           </Stack>
         </Col>
+      </Row>
+
+      <Row gap={2} className='mt-5 p-2'>
+        <div style={{ position: 'relative' }}>
+          <TextArea
+            loading={loading}
+            type={SectionType.Output}
+            value={output}
+            onChange={setOutput}
+          />
+
+          <div style={{ position: 'absolute', left: 0, bottom: 0, display: 'flex' }}>
+            <Button
+              variant='link'
+              onClick={handleArrow}>
+              <ArrowsIcon />
+            </Button>
+          </div>
+        </div>
       </Row>
     </Container>
   )

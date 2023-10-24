@@ -1,5 +1,4 @@
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import Form from 'react-bootstrap/Form';
+import Form from 'react-bootstrap/Form'
 
 interface Props {
   onChange: (value: string) => void
@@ -8,15 +7,11 @@ interface Props {
   className?: string
 }
 
-export function FloatingInput({ value, style, className, onChange }: Props) {
-  const commonStyles = {
-    padding: '0px',
-  }
-
+export function FloatingInput ({ value, style, className, onChange }: Props) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange(event.target.value)
   }
-  
+
   return (
     <Form.Floating className='mb-3'>
       <Form.Control
@@ -29,5 +24,5 @@ export function FloatingInput({ value, style, className, onChange }: Props) {
       />
       <label htmlFor="floatingInputCustom" style={{ lineHeight: '0px' }}>Número de vecinos</label>
     </Form.Floating>
-  );
+  )
 }

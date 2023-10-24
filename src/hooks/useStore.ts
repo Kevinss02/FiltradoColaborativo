@@ -5,9 +5,12 @@ import { type Metric, type Action, type State, type Prediction } from '../types'
 const initialState: State = {
   chosenMetric: 'cp',
   predictionType: 'ps',
-  neighborsNumber: '1',
+  neighborsNumber: '',
   inputMatrix: '',
   resultMatrix: '',
+  output: '',
+  outputIndex: '0',
+  incognitaNumber: '',
   loading: false
 }
 
@@ -72,6 +75,22 @@ function reducer (state: State, action: Action) {
     }
   }
 
+  if (type === 'SET_OUTPUT') {
+    return {
+      ...state,
+      loading: false,
+      output: action.payload
+    }
+  }
+
+  if (type === 'SET_OUTPUT_INDEX') {
+    return {
+      ...state,
+      loading: false,
+      outputIndex: action.payload
+    }
+  }
+
   return state
 }
 
@@ -81,8 +100,11 @@ export function useStore () {
     chosenMetric,
     predictionType,
     neighborsNumber,
+    incognitaNumber,
     inputMatrix,
     resultMatrix,
+    output,
+    outputIndex,
     loading
   }, dispatch] = useReducer(reducer, initialState)
 
@@ -106,17 +128,30 @@ export function useStore () {
     dispatch({ type: 'SET_RESULT_MATRIX', payload })
   }
 
+  const setOutput = (payload: string) => {
+    dispatch({ type: 'SET_OUTPUT', payload })
+  }
+
+  const setOutputIndex = (payload: string) => {
+    dispatch({ type: 'SET_OUTPUT_INDEX', payload })
+  }
+
   return {
     chosenMetric,
     predictionType,
     neighborsNumber,
     inputMatrix,
     resultMatrix,
+    output,
+    outputIndex,
+    incognitaNumber,
     loading,
     setMetric,
     setPrediction,
     setNeighborsNumber,
     setInputMatrix,
-    setResultMatrix
+    setResultMatrix,
+    setOutput,
+    setOutputIndex
   }
 }

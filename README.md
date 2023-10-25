@@ -51,6 +51,7 @@ Para el desarrollo de este código cabe a destacar una serie de pasos que hemos 
     4. A través de los vecinos seleccionados se calcula la predicción para la incógnita actual. Se realizará el tipo de predicción seleccionado dentro de la interfaz web y se calculará el valor de la predicción para esa incógnita.
     5. Este valor se sustituirá por la posición con incógnita correspondiente dentro de la matriz. Este nuevo valor se utilizará para las siguientes predicciones.
     6. Se vuelve a repetir el proceso hasta que se hayan evaluado todas las incógnitas dentro de la matriz, mostrando por la web la matriz resultante a través de la métrica seleccionada, el número de vecinos y el tipo de predicción.
+    7. La interfaz web muestra diferentes cosas: el cuadro de introducción de la matriz, la selección de la métrica, la selección por teclado del número de vecinos, la selección de la predicción a través de un desplegable, la matriz resultante y un último cuadro donde se muestra en el orden en el que se han calculado cada una de las incógnitas. Incluye una navegación.
 
 ## Ejemplo de uso
 
